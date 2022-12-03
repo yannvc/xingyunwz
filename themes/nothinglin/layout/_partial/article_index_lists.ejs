@@ -1,0 +1,79 @@
+<!-- 文章列表 -->
+<div class="eleven wide column art-list">
+  
+
+
+  <% page.posts.sort('date', 'desc').each(function(post){ %>
+  <!-- 文章列表 -->
+  <div class="ui segment background-thin-yellow stackable ">
+    <!-- 文章标题 -->
+    <div class="ui segment row-flex-left margin-padding-less border-background-less">
+
+      <h3 class="ui header margin-5">
+        <a href="<%- url_for(post.path) %>">
+          <%- truncate(post.title || '该文章无标题', {length: 100, omission: '...'}) %></a>
+          <div class="ui background-thin-red label margin-5 font-white">
+            <% if(post.categories.length){ %>
+            <%- list_categories(post.categories, {
+                      show_count: false,
+                      style: 'none',
+                      separator: ' ',
+                      amount: 1
+                  }) %>
+            <% } else { %>
+            <%= '未分类' %>
+            <% } %>
+          </div>
+      </h3>
+    </div>
+    <!-- 文章内容简介 -->
+    <div class="ui grid  stackable">
+      <!-- 缩略图 -->
+      <div class="five wide column">
+        <div class="ui card margin-10">
+          <div class="image">
+            <img class="ui small image" src="<%- url_for('/img/default.png') %>">
+          </div>
+        </div>
+      </div>
+      <!-- 内容简介 -->
+      <div class="eleven wide column">
+        <div class="ui piled segment border-background-less intro">
+          <a href="<%- url_for(post.path) %>">
+            <p><%- truncate(strip_html(post.content),{length: 210,omission: '...'}) %>...</p>
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- 分割线 -->
+    <div class="ui divider title-divider"></div>
+    <!-- 文章info -->
+    <div class="row-flex-left">
+      <h5 class="header margin-left-right-10"><i class="address user icon"></i><%- post.author -%></h5>
+      <h5 class="header margin-left-right-10"><i class="address  calendar alternate outline icon"></i><%- date(post.date,"YYYY年MM月DD日") %></h5>
+      <h5 class="header margin-left-right-10"><i class="address  tag icon"></i>
+        <% if(post.categories.length){ %>
+        <%- list_tags(post.tags, {
+      										show_count: false,
+      										style: 'none',
+      										separator: ' ， ',
+      										amount: 3
+      								}) %>
+        <% } else { %>
+        <%= '空' %>
+        <% } %></h5>
+    </div>
+  </div>
+  <% }) %>
+
+  <% if (page.total > 1){ %>
+  <!-- 分页菜单 -->
+  <div class="ui borderless menu background-thin-yellow" role="navigation">
+    <%- paginator({
+                prev_text: "上一页",
+                next_text: "下一页"
+            }) %>
+  </div>
+
+  <% } %>
+</div>
